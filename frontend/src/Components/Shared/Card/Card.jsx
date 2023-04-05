@@ -12,3 +12,4 @@ export const Card = ({title,icon,children}) => {
     
   )
 }
+export default Card;

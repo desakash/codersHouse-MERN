@@ -12,7 +12,7 @@ export const Home = () => {
   };
   const navigate = useNavigate();
   function startRegister(){
-    navigate('/register')
+    navigate('/authenticate')
   }   
 
   return (
@@ -22,11 +22,11 @@ export const Home = () => {
           We’re working hard to get Codershouse ready for everyone! While we wrap up the finishing youches, we’re adding people gradually to make sure nothing breaks
         </p>
         <div>
-         <Button onclick={startRegister} text="Get your Username"></Button>
+         <Button onclick={startRegister} text="Let's Go"></Button>
         </div>
         <div className={styles.signinWrapper}>
           <span className={styles.hasInvite}>Have an invite Text ?</span>
-          <Link to='/login' style={signInLinkStyle}>Sign In</Link>
+          
         </div>
       </Card>
     </div>

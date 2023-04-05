@@ -8,3 +8,4 @@ export const Button = ({text,onclick}) => {
   </button>
   )
 }
+export default Button;
