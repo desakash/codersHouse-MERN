@@ -6,7 +6,7 @@ class TokenService{
     generateTokens(payload)
     {
         const accessToken = jwt.sign(payload,accessTokenSecret,{
-            expiresIn:'1h'
+            expiresIn:'1m'
         });
         const refreshToken = jwt.sign(payload,refreshTokenSecret,{
             expiresIn:'1y'
@@ -14,7 +14,7 @@ class TokenService{
         return {accessToken,refreshToken}
     }
 
-    async storeRfreshToken(token,userId){
+    async storeRefreshToken(token,userId){
         try {
             await refreshModel.create({
                 token:token,
@@ -28,6 +28,22 @@ class TokenService{
 
     async verifyAccessToken(token){
         return jwt.verify(token,accessTokenSecret);
+    }
+
+    async verifyRefreshToken(refreshToken)
+    {
+        return jwt.verify(refreshToken,refreshTokenSecret);
+    }
+
+    async findRefreshToken(userId,refreshToken){
+        return await refreshModel.findOne({userId:userId,token:refreshToken});
+    }
+
+    async updateRefreshToken(userId,refreshToken){
+        return await refreshModel.updateOne({userId:userId},{token:refreshToken});
+    }
+    async removeToken(refreshToken){
+        return await refreshModel.deleteOne({token:refreshToken});
     }
 }
 module.exports = new TokenService();

@@ -7,14 +7,19 @@ import { Navigation } from './Components/Shared/Navigation/Navigation';
 import Authenticate from './pages/Authenticate/Authenticate';
 import Activate from './pages/Activate/Activate';
 import Rooms from './pages/Rooms/Rooms';
-import { Children } from 'react';
+import { Children, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useLoadingWithRefresh } from './hooks/useLoadingWithRefresh';
 // const isAuth = false;
 // const user = {
 //   activated :false,
 // };
 function App() {
-  return (
+ 
+  const {loading} = useLoadingWithRefresh();
+  return loading ? (
+    'Loading...'
+  ) : (
     <BrowserRouter>
       <Navigation />
       <Routes>

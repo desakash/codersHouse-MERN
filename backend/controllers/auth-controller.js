@@ -74,7 +74,7 @@ class AuthController {
         //token
         const {accessToken,refreshToken} = tokenService.generateTokens({_id:user._id,activated:false});
 
-        await  tokenService.storeRfreshToken(refreshToken,user._id);
+        await  tokenService.storeRefreshToken(refreshToken,user._id);
 
         res.cookie('refreshToken',refreshToken,{
             maxAge: 1000*60*24*30,
@@ -88,6 +88,57 @@ class AuthController {
         const userDto = new UserDto(user)
         res.json({user:userDto,auth:true});
 
+    }
+    async refresh(req,res){
+        const {refreshToken:refreshTokenFromCookie} = req.cookies;
+        let userData;
+        try {
+            userData = await tokenService.verifyRefreshToken(refreshTokenFromCookie)
+        } catch (error) {
+            return res.status(401).json({message:'Invalid Token'});
+        }
+       try {
+        const token = tokenService.findRefreshToken(userData._id,refreshTokenFromCookie);
+        if(!token){
+            return res.status(401).json({message:'invalid token'}); 
+        }
+       } catch (error) {
+        return res.status(500).json({message:'internal error'});
+       }
+
+       const user = await userService.findUser({_id:userData._id});
+       if(!user){
+        return res.status(400).json({message:'No User'});
+       }
+
+       const {refreshToken,accessToken} = tokenService.generateTokens({_id:userData._id})
+
+       try {
+        tokenService.updateRefreshToken(userData._id,refreshToken);
+       } catch (error) {
+        return res.status(500).json({message:'internal error'});
+       }
+
+       res.cookie('refreshToken',refreshToken,{
+        maxAge: 1000*60*24*30,
+        httpOnly:true
+    });
+
+    res.cookie('accessToken',accessToken,{
+        maxAge: 1000*60*24*30,
+        httpOnly:true
+    });
+    const userDto = new UserDto(user)
+    res.json({user:userDto,auth:true});
+    }
+
+    async logout(req,res){
+        const {refreshToken} = req.cookies;
+        await tokenService.removeToken(refreshToken);
+
+        res.clearCookie('refreshToken');
+        res.clearCookie('accessToken');
+        res.json({user:null,auth:false});
     }
 }
 
