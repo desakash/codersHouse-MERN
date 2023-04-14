@@ -1,9 +1,24 @@
 import React, { useState } from 'react'
 import styles from './AddRoomModal.module.css'
 import TextInput from '../Shared/TextInput/TextInput'
+import { createRoom as create } from '../../http'
+import {useNavigate} from 'react-router-dom';
 const AddRoomModal = ({onClose}) => {
+    const navigate = useNavigate();  
+
     const [roomType,setRoomType] = useState('open');
     const [topic,setTopic] = useState('');
+
+    async function createRoom() {
+        try {
+            if(!topic) return;
+            const {data} = await create({topic,roomType});
+            navigate((`room/${data.id}`));
+            //console.log(data);
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
   return (
     <div className={styles.modalMask}>
         <div className={styles.modalBody}>
@@ -31,7 +46,7 @@ const AddRoomModal = ({onClose}) => {
             </div>
             <div className={styles.modalFooter}>
                 <h2>Start a room , Open to everyone</h2>
-                <button className={styles.footerButton}><img src="images/celebration.png" alt="celebration"/>
+                <button onClick={createRoom} className={styles.footerButton}><img src="images/celebration.png" alt="celebration"/>
                 <span>Let's Go</span>
                 </button>
             </div>

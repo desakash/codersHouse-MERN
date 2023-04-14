@@ -11,6 +11,7 @@ import { Children, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLoadingWithRefresh } from './hooks/useLoadingWithRefresh';
 import Loader from './Components/Shared/Loader/Loader';
+import Room from './pages/Room/Room';
 // const isAuth = false;
 // const user = {
 //   activated :false,
@@ -47,6 +48,10 @@ function App() {
 
         <Route element={<ProtectedRoute children={<Rooms />} />}>
           <Route path='/rooms' />
+        </Route>
+
+        <Route element={<ProtectedRoute children={<Room/>} />}>
+          <Route path='/room/:id' />
         </Route>
         {/* <GuestRoute path='/authenticate'>
           <Authenticate />
