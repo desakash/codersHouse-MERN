@@ -51,7 +51,7 @@ function App() {
         </Route>
 
         <Route element={<ProtectedRoute children={<Room/>} />}>
-          <Route path='/room/:id' />
+          <Route path='/rooms/:id' />
         </Route>
         {/* <GuestRoute path='/authenticate'>
           <Authenticate />

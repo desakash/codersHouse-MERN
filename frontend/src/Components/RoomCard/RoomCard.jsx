@@ -6,7 +6,7 @@ const RoomCard = ({room}) => {
   return (
     <div onClick={()=>{navigate(`/rooms/${room.id}`)}} className={styles.card}>
         <h3 className={styles.topic}>{room.topic}</h3>
-        <div className={`${styles.speakers} ${room.speakers.length === 1 ? styles.singleSpeaker : ''}`}>
+        <div className={`${styles.speakers} ${room.speakers.length === 1 ?          styles.singleSpeaker : ''}`}>   
             <div  className={styles.avatars}>
                 {room.speakers.map((speaker)=>(
                     <img key={speaker.id} src={speaker.avatar} alt="speaker-avatar" />

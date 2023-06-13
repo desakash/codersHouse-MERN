@@ -13,11 +13,7 @@ import { getAllRooms } from '../../http';
 //         name:'John Doe',
 //         avatar:'/images/monkey-avatar.png',
 //       },
-//       {
-//         id:2,
-//         name:'John Doe',
-//         avatar:'/images/monkey-avatar.png',
-//       },
+      
 //     ],
 //     totalPeople:40,
 //   },

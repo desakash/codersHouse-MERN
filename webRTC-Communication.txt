@@ -1,0 +1,37 @@
+Browser 1 : 
+
+const peerConnection = new RTCPeerConnection();
+const dataChannel = peerConnection.createDataChannel('bigData');
+dataChannel.onopen = ()=>console.log('channel opened');
+dataChannel.onmessage = (e)=>console.log('message'+e.data)
+peerConnection.onicecandidate = ()=>console.log('ice candidate',JSON.stringify(peerConnection.localDescription))
+const offer = await peerConnection.createOffer();
+peerConnection.setLocalDescription(offer)
+//copy the description
+
+
+browser 2 : 
+
+
+const peerConnection = new RTCPeerConnection()
+const offer = //paste the description copied from 1st browser
+peerConnection.onicecandidate = ()=>console.log('ise candidate' ,JSON.stringify(peerConnection.localDescription))
+await peerConnection.setRemoteDescription(offer)
+let dataChannel;
+peerConnection.ondatachannel = (e)=>{
+    dataChannel= e.channel;
+    dataChannel.onopen = ()=>console.log('channel opened')
+    dataChannel.onmessage = (e)=>console.log('message : ',e.data)
+}
+const answer = peerConnection.createAnswer()
+await peerConnection.setLocalDescription(answer)
+//copy the description
+
+
+
+browser 1 :
+peerConnection.setRemoteDescription(answer)
+dataChannel.send("Hello , from browser 1")
+
+browser 2 :
+dataChannel.send("hii , from browser 2")
